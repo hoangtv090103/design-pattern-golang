@@ -54,38 +54,61 @@ func (app *application) CreateCatFromAbstractFactory(w http.ResponseWriter, r *h
 	_ = t.WriteJSON(w, http.StatusOK, cat)
 }
 
-func (app *application) GetAllDogBreedsJSON(w http.ResponseWriter, r *http.Request) { 
-    var t toolbox.Tools
-    dogBreeds, err := app.App.Models.DogBreed.All()
-    
-    if err != nil {
-        _ = t.ErrorJSON(w, err, http.StatusBadRequest)
-        return
-    }
-    
-    _ = t.WriteJSON(w, http.StatusOK, dogBreeds)
-    
+func (app *application) GetAllDogBreedsJSON(w http.ResponseWriter, r *http.Request) {
+	var t toolbox.Tools
+	dogBreeds, err := app.App.Models.DogBreed.All()
+
+	if err != nil {
+		_ = t.ErrorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	_ = t.WriteJSON(w, http.StatusOK, dogBreeds)
+
 }
 
 func (app *application) CreateDogWithBuilder(w http.ResponseWriter, r *http.Request) {
-    var t toolbox.Tools
-    
-    // create a dog using the builder pattern
-    p, err := pets.NewPetBuilder().
-        SetSpecies("dog").
-        SetBreed("mixed breed").
-        SetWeight(15).
-        SetDescription("A mixed breed of unknown origin. Probably has some German Shepherd heritage").
-        SetColor("Black and White").
-        SetAge(3).
-        SetAgeEstimated(true).
-        Build()
-    
-    if err != nil {
-        _ = t.ErrorJSON(w, err, http.StatusBadRequest)
-        return
-    }
-    
-    _ = t.WriteJSON(w, http.StatusOK, p)
+	var t toolbox.Tools
 
+	// create a dog using the builder pattern
+	p, err := pets.NewPetBuilder().
+		SetSpecies("dog").
+		SetBreed("mixed breed").
+		SetWeight(15).
+		SetDescription("A mixed breed of unknown origin. Probably has some German Shepherd heritage").
+		SetColor("Black and White").
+		SetAge(3).
+		SetAgeEstimated(true).
+		Build()
+
+	if err != nil {
+		_ = t.ErrorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	_ = t.WriteJSON(w, http.StatusOK, p)
+
+}
+
+func (app *application) CreateCatWithBuilder(w http.ResponseWriter, r *http.Request) {
+	var t toolbox.Tools
+
+	// Create a cat using the builder pattern
+	p, err := pets.NewPetBuilder().
+		SetSpecies("cat").
+		SetBreed("fellis silvestris catus").
+		SetWeight(4).
+		SetDescription("A beautiful house cat.").
+		SetGeographicOrigin("Canada").
+		SetColor("Calico").
+		SetAge(1).
+		SetAgeEstimated(true).
+		Build()
+
+	if err != nil {
+		_ = t.ErrorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	_ = t.WriteJSON(w, http.StatusOK, p)
 }
