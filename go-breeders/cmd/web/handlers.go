@@ -86,7 +86,6 @@ func (app *application) CreateDogWithBuilder(w http.ResponseWriter, r *http.Requ
         return
     }
     
-    _ = t.WriteXML(w, http.StatusOK, p)
-    
-    
+    _ = t.WriteJSON(w, http.StatusOK, p)
+
 }
