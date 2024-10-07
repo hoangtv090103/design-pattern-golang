@@ -18,6 +18,7 @@ type application struct {
 	config      appConfig
 	Models      models.Models
 	App         *configuration.Application
+	catService  *RemoteService
 }
 
 type appConfig struct {
@@ -48,7 +49,14 @@ func main() {
 		log.Panic(err)
 		return
 	}
-	
+
+	jsonBackend := &JSONBackend{}
+	jsonAdapter := &RemoteService{
+		Remote: jsonBackend,
+	}
+
+	app.catService = jsonAdapter
+
 	app.App = configuration.New(db)
 
 	srv := &http.Server{
