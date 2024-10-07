@@ -63,3 +63,16 @@ func NewPetFromAbstractFactory(species string) (IAnimal, error) {
 		return nil, errors.New("invaild specie supplied")
 	}
 }
+
+func NewPetWithBreedFromAbstractFactory(species, breed string) (IAnimal, error){
+    switch species {
+        case "dog":
+            // return a dog with breed embedded
+            return &DogFromFactory{}, nil
+        case "cat":
+            // return a cat with breed embedded
+            return &CatFromFactory{}, nil
+        default:
+            return nil, errors.New("invalid species supplied")
+    }
+}
