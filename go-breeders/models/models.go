@@ -7,17 +7,16 @@ import (
 
 var repo Repository
 
-
 type Models struct {
 	DogBreed DogBreed
 }
 
 func New(conn *sql.DB) *Models {
-    if conn == nil {
-        repo = newTestMysqlRepository(nil)
-    } else {        
-        repo = newMysqlRepository(conn)
-    }
+	if conn == nil {
+		repo = newTestMysqlRepository(nil)
+	} else {
+		repo = newMysqlRepository(conn)
+	}
 
 	return &Models{
 		DogBreed: DogBreed{},
@@ -41,15 +40,15 @@ func (d *DogBreed) All() ([]*DogBreed, error) {
 }
 
 type CatBreed struct { // maybe data is stored in remote API
-	ID               int    `json:"id"`
-	Breed            string `json:"breed"`
-	WeightLowLbs     int    `json:"weight_low_lbs"`
-	WeightHighLbs    int    `json:"weight_high_lbs"`
-	AverageWeight    int    `json:"average_weight"`
-	Lifespan         int    `json:"average_lifespan"`
-	Details          string `json:"details"`
-	AlternateNames   string `json:"alternate_name"`
-	GeographicOrigin string `json:"geographic_origin"`
+	ID               int    `json:"id" xml:"id"`
+	Breed            string `json:"breed" xml:"breed"`
+	WeightLowLbs     int    `json:"weight_low_lbs" xml:"weight_low_lbs"`
+	WeightHighLbs    int    `json:"weight_high_lbs" xml:""weight_high_lbs"`
+	AverageWeight    int    `json:"average_weight" xml:"average_weight"`
+	Lifespan         int    `json:"average_lifespan" xml:"lifespan"`
+	Details          string `json:"details" xml:"details"`
+	AlternateNames   string `json:"alternate_name" xml:"alternate_names"`
+	GeographicOrigin string `json:"geographic_origin" xml:"geographic_origin"`
 }
 
 type Dog struct {

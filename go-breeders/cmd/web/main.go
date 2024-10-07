@@ -50,14 +50,20 @@ func main() {
 		return
 	}
 
-	jsonBackend := &JSONBackend{}
-	jsonAdapter := &RemoteService{
-		Remote: jsonBackend,
+	// jsonBackend := &JSONBackend{}
+	// jsonAdapter := &RemoteService{
+	// 	Remote: jsonBackend,
+	// }
+
+	xmlBackend := &XMLBackend{}
+	xmlAdapter := &RemoteService{
+		Remote: xmlBackend,
 	}
 
-	app.catService = jsonAdapter
-
 	app.App = configuration.New(db)
+	
+	// app.catService = jsonAdapter
+	app.catService = xmlAdapter
 
 	srv := &http.Server{
 		Addr:              port,
