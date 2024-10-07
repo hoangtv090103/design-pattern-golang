@@ -7,14 +7,20 @@ import (
 	"net/http"
 )
 
+// ICatBreeds is simply our target interface, which defines all the methods that
+// any type which implements this interface must have.
 type ICatBreeds interface {
 	GetAllCatBreeds() ([]*models.CatBreed, error)
 }
 
+// RemoteService is the Adapter type. It embeds a DataInterface interface
+// (which is critical to the pattern).
 type RemoteService struct {
 	Remote ICatBreeds
 }
 
+// GetAllBreeds is the function on RemoteService which lets us
+// Call any adaptor which implements the DataInterface type.
 func (rs *RemoteService) GetAllBreeds() ([]*models.CatBreed, error) {
 	return rs.Remote.GetAllCatBreeds()
 }

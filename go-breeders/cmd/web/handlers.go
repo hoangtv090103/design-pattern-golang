@@ -112,3 +112,16 @@ func (app *application) CreateCatWithBuilder(w http.ResponseWriter, r *http.Requ
 
 	_ = t.WriteJSON(w, http.StatusOK, p)
 }
+
+func (app *application) GetAllCatBreeds(w http.ResponseWriter, r *http.Request) {
+    var t toolbox.Tools
+
+    catBreeds, err := app.catService.GetAllBreeds()
+
+    if err != nil {
+        _ = t.ErrorJSON(w, err, http.StatusBadRequest)
+        return
+    }
+
+    _ = t.WriteJSON(w, http.StatusOK, catBreeds)
+}
