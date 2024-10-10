@@ -65,7 +65,7 @@
                 <div class="row mb-3">
                     <label for="species" class="col-sm-2 col-form-label">Species</label>
                     <select id="species" claas="form-select">
-                        <option selecte>Choose..</option>
+                        <option selected>Choose..</option>
                         <option value="cat">Cat</option>
                         <option value="dog">Dog</option>
                     </select>
@@ -101,6 +101,9 @@
     let dogBuilderBtn = document.getElementById("dog-builder-btn")
     let catBuilderBtn = document.getElementById("cat-builder-btn")
     let builderOutput = document.getElementById("builder-output")
+    
+    let abstractFactoryIIBtn = document.getElementById("abstract-factory-ii-btn")
+    let abstractFactoryIIOutput = document.getElementById("abstract-factory-ii-output")
 
     document.addEventListener("DOMContentLoaded", function () {
         dogFactoryButton.addEventListener("click", function () {
@@ -171,6 +174,21 @@
                         builderOutput.innerHTML = data.error;
                     } else {
                         builderOutput.innerHTML = JSON.stringify(data, undefined, 4);
+                    }
+                })
+        })
+        
+        abstractFactoryIIBtn.addEventListener("click", () => {
+            let species = document.getElementById("species").value;
+            let breed = document.getElementById("breed").value;
+            
+            fetch(`/api/animal-from-abstract-factory/${species}/${breed}`, {method: 'get'})
+                .then((respone) => respone.json())
+                .then((data) => {
+                    if (data.error) {
+                        abstractFactoryIIOutput.innerHTML = data.error;
+                    } else {
+                        abstractFactoryIIOutput.innerHTML = JSON.stringify(data, undefined, 4);
                     }
                 })
         })
