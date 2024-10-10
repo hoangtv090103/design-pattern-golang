@@ -47,7 +47,7 @@ func (df *DogAbstractFactory) newPetWithBreeds(b string) IAnimal {
     breed, _ := app.Models.DogBreed.GetBreedByName(b)
     return &DogFromFactory{
         Pet: &models.Dog{
-            Breed: *breed,
+        Breed: *breed,
         },
     }
 }
@@ -61,14 +61,14 @@ func (cf *CatAbstractFactory) newPet() IAnimal {
 	}
 }
 
-func (cf *CatAbstractFactory) newPetWithBreeds(breed string) IAnimal {
+func (cf *CatAbstractFactory) newPetWithBreeds(b string) IAnimal {
     // Get breed for cat
 
-    // app := configuration.GetInstance()
-    // breed, _ := app.Models.DogBreed.GetBreedByName(breed)
+    app := configuration.GetInstance()
+    breed, _ := app.CatService.Remote.GetCatBreedByName(b)
     return &CatFromFactory{
         Pet: &models.Cat{
-            // Breed: breed,
+            Breed: *breed,
         },
     }
 }
@@ -96,7 +96,7 @@ func NewPetWithBreedFromAbstractFactory(
 	case "dog":
 		// return a dog with breed embedded
 		var dogFactory DogAbstractFactory
-		dog := dogFactory.newPetWithBreed(breed)
+		dog := dogFactory.newPetWithBreeds(breed)
 		return dog, nil
 		
 	case "cat":

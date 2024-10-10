@@ -47,7 +47,7 @@ type CatBreed struct { // maybe data is stored in remote API
 	ID               int    `json:"id" xml:"id"`
 	Breed            string `json:"breed" xml:"breed"`
 	WeightLowLbs     int    `json:"weight_low_lbs" xml:"weight_low_lbs"`
-	WeightHighLbs    int    `json:"weight_high_lbs" xml:""weight_high_lbs"`
+	WeightHighLbs    int    `json:"weight_high_lbs" xml:"weight_high_lbs"`
 	AverageWeight    int    `json:"average_weight" xml:"average_weight"`
 	Lifespan         int    `json:"average_lifespan" xml:"lifespan"`
 	Details          string `json:"details" xml:"details"`

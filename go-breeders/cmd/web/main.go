@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"go-breeders/adapters"
 	"go-breeders/configuration"
 	"go-breeders/models"
 	"html/template"
@@ -18,7 +19,6 @@ type application struct {
 	config      appConfig
 	Models      models.Models
 	App         *configuration.Application
-	catService  *RemoteService
 }
 
 type appConfig struct {
@@ -55,15 +55,13 @@ func main() {
 	// 	Remote: jsonBackend,
 	// }
 
-	xmlBackend := &XMLBackend{}
-	xmlAdapter := &RemoteService{
+	xmlBackend := &adapters.XMLBackend{}
+	xmlAdapter := &adapters.RemoteService{
 		Remote: xmlBackend,
 	}
 
-	app.App = configuration.New(db)
+	app.App = configuration.New(db, xmlAdapter)
 	
-	// app.catService = jsonAdapter
-	app.catService = xmlAdapter
 
 	srv := &http.Server{
 		Addr:              port,
