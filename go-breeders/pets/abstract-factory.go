@@ -29,6 +29,7 @@ func (cff *CatFromFactory) Show() string {
 type IPetFactory interface {
 	// returns an object that satisfies the IAnimal interface.
 	newPet() IAnimal
+	newPetWithBreed(breed string) IAnimal
 }
 
 type DogAbstractFactory struct {
@@ -40,6 +41,16 @@ func (df *DogAbstractFactory) newPet() IAnimal {
 	}
 }
 
+func (df *DogAbstractFactory) newPetWithBreeds(breed string) IAnimal {
+    // app := configuration.GetInstance()
+    // breed, _ := app.Models.DogBreed.GetBreedByName(breed)
+    return &DogFromFactory{
+        Pet: &models.Dog{
+            // Breed: breed,
+        },
+    }
+}
+
 type CatAbstractFactory struct {
 }
 
@@ -47,6 +58,18 @@ func (cf *CatAbstractFactory) newPet() IAnimal {
 	return &CatFromFactory{
 		Pet: &models.Cat{},
 	}
+}
+
+func (cf *CatAbstractFactory) newPetWithBreeds(breed string) IAnimal {
+    // Get breed for cat
+
+    // app := configuration.GetInstance()
+    // breed, _ := app.Models.DogBreed.GetBreedByName(breed)
+    return &CatFromFactory{
+        Pet: &models.Cat{
+            // Breed: breed,
+        },
+    }
 }
 
 func NewPetFromAbstractFactory(species string) (IAnimal, error) {
@@ -72,7 +95,7 @@ func NewPetWithBreedFromAbstractFactory(
 	case "dog":
 		// return a dog with breed embedded
 		var dogFactory DogAbstractFactory
-		dog := dogFactory.newPet()
+		dog := dogFactory.newPetWithBreed(breed)
 		return dog, nil
 		
 	case "cat":
