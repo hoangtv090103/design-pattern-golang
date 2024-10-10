@@ -28,7 +28,7 @@ func (cff *CatFromFactory) Show() string {
 
 type IPetFactory interface {
 	// returns an object that satisfies the IAnimal interface.
-	newPet() IAnimal 
+	newPet() IAnimal
 }
 
 type DogAbstractFactory struct {
@@ -64,15 +64,23 @@ func NewPetFromAbstractFactory(species string) (IAnimal, error) {
 	}
 }
 
-func NewPetWithBreedFromAbstractFactory(species, breed string) (IAnimal, error){
-    switch species {
-        case "dog":
-            // return a dog with breed embedded
-            return &DogFromFactory{}, nil
-        case "cat":
-            // return a cat with breed embedded
-            return &CatFromFactory{}, nil
-        default:
-            return nil, errors.New("invalid species supplied")
-    }
+// NewPetWithBreedFromAbstractFactory is the abstract factory method
+func NewPetWithBreedFromAbstractFactory(
+	species, breed string,
+) (IAnimal, error) {
+	switch species {
+	case "dog":
+		// return a dog with breed embedded
+		var dogFactory DogAbstractFactory
+		dog := dogFactory.newPet()
+		return dog, nil
+		
+	case "cat":
+		// return a cat with breed embedded
+		var catFactory CatAbstractFactory
+		cat := catFactory.newPet()
+		return cat, nil
+	default:
+		return nil, errors.New("invalid species supplied")
+	}
 }
