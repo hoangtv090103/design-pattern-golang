@@ -35,6 +35,6 @@ func (app *application) routes() http.Handler {
 	mux.Get("/api/dog-breeds", app.GetAllDogBreedsJSON)
 	mux.Get("/api/cat-breeds", app.GetAllCatBreeds)
 	
-
+	mux.Get("/api/animal-from-abstract-factory/{species}/{breed}", app.AnimalFromAbstractFactory)
 	return mux
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go-breeders/configuration"
 	"go-breeders/models"
+	"log"
 )
 
 type IAnimal interface {
@@ -65,7 +66,13 @@ func (cf *CatAbstractFactory) newPetWithBreeds(b string) IAnimal {
     // Get breed for cat
 
     app := configuration.GetInstance()
-    breed, _ := app.CatService.Remote.GetCatBreedByName(b)
+    breed, err := app.CatService.Remote.GetCatBreedByName(b)
+    
+    if err != nil {
+        log.Println(err)
+        return nil
+    }
+    
     return &CatFromFactory{
         Pet: &models.Cat{
             Breed: *breed,
@@ -102,7 +109,7 @@ func NewPetWithBreedFromAbstractFactory(
 	case "cat":
 		// return a cat with breed embedded
 		var catFactory CatAbstractFactory
-		cat := catFactory.newPet()
+		cat := catFactory.newPetWithBreeds(breed)
 		return cat, nil
 	default:
 		return nil, errors.New("invalid species supplied")

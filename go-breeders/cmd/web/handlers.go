@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go-breeders/pets"
 	"net/http"
+	"net/url"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/tsawler/toolbox"
@@ -131,8 +132,15 @@ func (app *application) AnimalFromAbstractFactory(w http.ResponseWriter, r *http
     // var t toolbox.Tools
     
     // Get species from URL itself
+    species := chi.URLParam(r, "species")
     
     // Get breed from the URL
+    b := chi.URLParam(r, "breed")
+    
+    // In case breed is 2 or more words, hello world -> hello%20wo
+    breed, _ := url.QueryUnescape(b)
+    
+    fmt.Println("Species:", species, "Breed:", breed)
     
     // Create a pet from abstract factory
     

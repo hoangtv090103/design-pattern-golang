@@ -36,7 +36,7 @@ type testRepository struct {
 }
 
 // newTestRepository is a convenience factory method to return a new mysqlRepository.
-func newTestRepository(conn *sql.DB) Repository {
+func newTestRepository(_ *sql.DB) Repository {
 	return &testRepository{
 		DB: nil,
 	}
