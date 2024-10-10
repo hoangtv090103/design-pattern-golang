@@ -3,6 +3,7 @@ package pets
 import (
 	"errors"
 	"fmt"
+	"go-breeders/configuration"
 	"go-breeders/models"
 )
 
@@ -41,12 +42,12 @@ func (df *DogAbstractFactory) newPet() IAnimal {
 	}
 }
 
-func (df *DogAbstractFactory) newPetWithBreeds(breed string) IAnimal {
-    // app := configuration.GetInstance()
-    // breed, _ := app.Models.DogBreed.GetBreedByName(breed)
+func (df *DogAbstractFactory) newPetWithBreeds(b string) IAnimal {
+    app := configuration.GetInstance()
+    breed, _ := app.Models.DogBreed.GetBreedByName(b)
     return &DogFromFactory{
         Pet: &models.Dog{
-            // Breed: breed,
+            Breed: *breed,
         },
     }
 }
