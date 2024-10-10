@@ -50,8 +50,8 @@ func main() {
 		return
 	}
 
-	// jsonBackend := &JSONBackend{}
-	// jsonAdapter := &RemoteService{
+	// jsonBackend := &adapters.JSONBackend{}
+	// jsonAdapter := &adapters.RemoteService{
 	// 	Remote: jsonBackend,
 	// }
 
