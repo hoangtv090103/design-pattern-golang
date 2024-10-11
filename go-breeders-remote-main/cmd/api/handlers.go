@@ -22,6 +22,17 @@ func (app *application) GetAllCatBreedsJSON(w http.ResponseWriter, r *http.Reque
 	_ = t.WriteJSON(w, http.StatusOK, catBreeds)
 }
 
+// Get a dog of a particular breed and then decorate it with some new information
+func (app *application) DogOfMonth(w http.ResponseWriter, r *http.Request) {
+    // Get the breed
+    
+    // Get the dog of the month from database
+    
+    // Create dog and decorator
+    
+    // Serve the webpage
+}
+
 // GetAllCatBreedsXML gets a list of all cat breeds from the database and returns it as XML.
 func (app *application) GetAllCatBreedsXML(w http.ResponseWriter, r *http.Request) {
 	var t toolbox.Tools
