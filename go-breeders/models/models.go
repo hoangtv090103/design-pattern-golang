@@ -23,6 +23,17 @@ func New(conn *sql.DB) *Models {
 	}
 }
 
+type DogOfMonth struct {
+	ID    int
+	Dog   *Dog // Heart of the decorator pattern, we're simply wrapping an existing structure with another structure tha has additional information
+	Video string
+	Image string
+}
+
+func (d *Dog) GetDogOfMonthByID(id int) (*DogOfMonth, error) {
+	return repo.GetDogOfMonthByID(id)
+}
+
 type DogBreed struct { // maybe data is stored in local DB
 	ID               int    `json:"id"`
 	Breed            string `json:"breed"`
@@ -40,7 +51,7 @@ func (d *DogBreed) All() ([]*DogBreed, error) {
 }
 
 func (d *DogBreed) GetBreedByName(b string) (*DogBreed, error) {
-    return repo.GetBreedByName(b)
+	return repo.GetBreedByName(b)
 }
 
 type CatBreed struct { // maybe data is stored in remote API
