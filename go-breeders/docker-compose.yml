@@ -14,7 +14,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: breeders
       MYSQL_USER: mariadb
-      MYSQL_PASSWORD: myverysecretpassword
+      MYSQL_PASSWORD:
     volumes:
       - ./db-data/mariadb:/var/lib/mysql # [optional] Docker create the database files in a folder if doesn't exist.
       - ./sql/breeders_mysql.sql:/docker-entrypoint-initdb.d/create_tables.sql # Find the SQL and file
