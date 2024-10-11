@@ -37,7 +37,7 @@ func (app *application) DogOfMonth(w http.ResponseWriter, r *http.Request) {
 	dog := models.DogOfMonth{ // decorator type
 		Dog: &models.Dog{
 			ID:               1,
-			DogName:          "Same",
+			DogName:          "Sam",
 			BreedID:          breed.ID,
 			Color:            "Black & Tan",
 			DateOfBirth:      dob,
@@ -54,7 +54,7 @@ func (app *application) DogOfMonth(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]any)
 	data["dog"] = dog
 
-	app.render(w, "dog-of-moth.page.gohtml", &templateData{
+	app.render(w, "dog-of-month.page.gohtml", &templateData{
 		Data: data,
 	})
 }

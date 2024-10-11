@@ -56,7 +56,7 @@ func (m *mysqlRepository) GetBreedByName(b string) (*DogBreed, error) {
 
 	query := `select id, breed, weight_low_lbs, weight_high_lbs, cast(((weight_low_lbs + weight_high_lbs) / 2) as unsigned) as average_weight, lifespan, coalesce(details, ''),
 	coalesce(alternate_names, ''), coalesce(geographic_origin, '')
-	from dog_breeds where breed = '?'`
+	from dog_breeds where breed = ?`
 
 	row := m.DB.QueryRowContext(ctx, query, b)
 
@@ -87,7 +87,7 @@ func (m *mysqlRepository) GetDogOfMonthByID(id int) (*DogOfMonth, error) {
 	defer cancel()
 
 	query := `select id, video, image from dog_of_month where id = ?`
-	row := m.DB.QueryRowContext(ctx, query)
+	row := m.DB.QueryRowContext(ctx, query, id)
 
 	var dog DogOfMonth
 	err := row.Scan(&dog.ID, &dog.Video, &dog.Image)
