@@ -8,9 +8,8 @@ import (
 )
 
 type Application struct {
-	Models *models.Models
-	CatService  *adapters. RemoteService
-
+	Models     *models.Models
+	CatService *adapters.RemoteService
 }
 
 var instance *Application
@@ -28,7 +27,7 @@ func GetInstance() *Application {
 	// Do call the function if and only if do is being called for the first time for this instance of once
 	once.Do(func() {
 		instance = &Application{
-			Models: models.New(db),
+			Models:     models.New(db),
 			CatService: catSevice,
 		}
 	})

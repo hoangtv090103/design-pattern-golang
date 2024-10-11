@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"go-breeders/models"
 	"go-breeders/pets"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/tsawler/toolbox"
@@ -17,6 +19,44 @@ func (app *application) ShowHome(w http.ResponseWriter, r *http.Request) {
 func (app *application) ShowPage(w http.ResponseWriter, r *http.Request) {
 	page := chi.URLParam(r, "page")
 	app.render(w, fmt.Sprintf("%s.page.gohtml", page), nil)
+}
+
+// Get a dog of a particular breed and then decorate it with some new information
+func (app *application) DogOfMonth(w http.ResponseWriter, r *http.Request) {
+	// Get the breed
+	breed, _ := app.App.Models.DogBreed.GetBreedByName("German Shepherd Dog")
+
+	// Get the dog of the month from database
+	dom, _ := app.App.Models.Dog.GetDogOfMonthByID(1)
+
+	// Format date string to time.Time format
+	layout := "2006-01-02"
+	dob, _ := time.Parse(layout, "2023-11-01")
+
+	// Create dog and decorator
+	dog := models.DogOfMonth{ // decorator type
+		Dog: &models.Dog{
+			ID:               1,
+			DogName:          "Same",
+			BreedID:          breed.ID,
+			Color:            "Black & Tan",
+			DateOfBirth:      dob,
+			SpayedOrNeutered: 0,
+			Description:      "Sam is a very good boy",
+			Weight:           20,
+			Breed:            *breed,
+		},
+		Video: dom.Video,
+		Image: dom.Image,
+	}
+
+	// Serve the webpage
+	data := make(map[string]any)
+	data["dog"] = dog
+
+	app.render(w, "dog-of-moth.page.gohtml", &templateData{
+		Data: data,
+	})
 }
 
 func (app *application) CreateDogFromFactory(w http.ResponseWriter, r *http.Request) {
@@ -91,7 +131,7 @@ func (app *application) CreateDogWithBuilder(w http.ResponseWriter, r *http.Requ
 
 }
 
-func (app *application) CreateCatWithBuilder(w http.ResponseWriter, r *http.Request) {
+func (app *application) CreateCatWithBuilder(w http.ResponseWriter, _ *http.Request) {
 	var t toolbox.Tools
 
 	// Create a cat using the builder pattern
@@ -115,39 +155,39 @@ func (app *application) CreateCatWithBuilder(w http.ResponseWriter, r *http.Requ
 }
 
 func (app *application) GetAllCatBreeds(w http.ResponseWriter, r *http.Request) {
-    var t toolbox.Tools
+	var t toolbox.Tools
 
-    catBreeds, err := app.App.CatService.GetAllBreeds()
+	catBreeds, err := app.App.CatService.GetAllBreeds()
 
-    if err != nil {
-        _ = t.ErrorJSON(w, err, http.StatusBadRequest)
-        return
-    }
+	if err != nil {
+		_ = t.ErrorJSON(w, err, http.StatusBadRequest)
+		return
+	}
 
-    _ = t.WriteJSON(w, http.StatusOK, catBreeds)
+	_ = t.WriteJSON(w, http.StatusOK, catBreeds)
 }
 
 func (app *application) AnimalFromAbstractFactory(w http.ResponseWriter, r *http.Request) {
-    // Setup toolbox
-    var t toolbox.Tools
-    
-    // Get species from URL itself
-    species := chi.URLParam(r, "species")
-    
-    // Get breed from the URL
-    b := chi.URLParam(r, "breed")
-    
-    // In case breed is 2 or more words, hello world -> hello%20wo
-    breed, _ := url.QueryUnescape(b)
-    
-    fmt.Println("Species:", species, "Breed:", breed)
-    
-    // Create a pet from abstract factory
-    pet, err := pets.NewPetWithBreedFromAbstractFactory(species, breed)
-    if err != nil {
-        _ = t.ErrorJSON(w, err, http.StatusBadRequest)
-        return
-    }
-    // Write the result as JSON
-    _ = t.WriteJSON(w, http.StatusOK, pet)
+	// Setup toolbox
+	var t toolbox.Tools
+
+	// Get species from URL itself
+	species := chi.URLParam(r, "species")
+
+	// Get breed from the URL
+	b := chi.URLParam(r, "breed")
+
+	// In case breed is 2 or more words, hello world -> hello%20wo
+	breed, _ := url.QueryUnescape(b)
+
+	fmt.Println("Species:", species, "Breed:", breed)
+
+	// Create a pet from abstract factory
+	pet, err := pets.NewPetWithBreedFromAbstractFactory(species, breed)
+	if err != nil {
+		_ = t.ErrorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+	// Write the result as JSON
+	_ = t.WriteJSON(w, http.StatusOK, pet)
 }
