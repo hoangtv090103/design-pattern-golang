@@ -1,6 +1,9 @@
 package main
 
-import "streamer"
+import (
+	"fmt"
+	"streamer"
+)
 
 func main() {
     // Define number of workers and jobs
@@ -13,15 +16,16 @@ func main() {
     
     videoQueue := make(chan streamer.VideoProccessing, numJobs)
     defer close(videoQueue)
-    
-        // Get a worker pool.
-         
-        // Start the worker pool.
 
-        // Create 4 videos to send to the worker pool.
-        
-        // Send the videos to the worker pool.
-        
-        // Print out results.
+    // Get a worker pool.
+    wp := streamer.New(videoQueue, numWorkers)
+    fmt.Println("wp:", wp)
+    // Start the worker pool.
+
+    // Create 4 videos to send to the worker pool.
+    
+    // Send the videos to the worker pool.
+    
+    // Print out results.
     
 }
