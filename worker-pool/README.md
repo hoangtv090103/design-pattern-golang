@@ -15,3 +15,6 @@
 - The worker pool pattern is commonly used in server applications where you need to handle multiple requests concurrently.
 - It is also useful in other situations where you need to perform a large number of tasks concurrently.
 
+$$
+\frac{\partial f}{\partial t}
+$$

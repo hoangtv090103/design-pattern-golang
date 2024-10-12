@@ -14,7 +14,7 @@ func main() {
     notifyChan := make(chan streamer.ProcessingMessage, numJobs)
     defer close(notifyChan)
     
-    videoQueue := make(chan streamer.VideoProccessing, numJobs)
+    videoQueue := make(chan streamer.VideoProccessingJob, numJobs)
     defer close(videoQueue)
 
     // Get a worker pool.

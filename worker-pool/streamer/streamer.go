@@ -12,8 +12,10 @@ type VideoProccessingJob struct {
 	Video Video
 }
 
-// Processor is a struct used to hold something that returns the kind of dat we need
+// Processor is a struct used to hold something that returns the kind of data we need
+// The type Processor holds something that actually either Processoses videos or simulates processing videos
 type Processor struct {
+    Engine Encoder
 }
 
 type Video struct {
