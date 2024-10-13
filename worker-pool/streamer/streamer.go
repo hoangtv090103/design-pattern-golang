@@ -15,7 +15,7 @@ type VideoProccessingJob struct {
 // Processor is a struct used to hold something that returns the kind of data we need
 // The type Processor holds something that actually either Processoses videos or simulates processing videos
 type Processor struct {
-    Engine Encoder
+	Engine Encoder
 }
 
 type Video struct {
@@ -27,6 +27,8 @@ type Video struct {
 	// Options *VideoOption
 	Encoder Processor
 }
+
+func (v *Video) encode() {}
 
 // VideoDispatcher: work pool
 func New(jobQueue chan VideoProccessingJob, maxWorkers int) *VideoDispatcher {
