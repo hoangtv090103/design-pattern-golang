@@ -93,7 +93,7 @@ func (v *Video) encode() {
 
 func (v *Video) encodeToMP4() (string, error) {
 	baseFilename := ""
-	fmt.Println("v.encodeToMP: about to try to encode video id", v.ID)
+	fmt.Println("v.encodeToMP4: about to try to encode video id", v.ID)
 	if !v.Options.RenameOutput {
 		// Get the base filename
 		b := path.Base(v.InputFile)
