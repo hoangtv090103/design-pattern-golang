@@ -7,14 +7,19 @@ import (
 	"strings"
 )
 
+// ProcessingMessage is the information sent back to the client
 type ProcessingMessage struct {
 	ID         int
 	Successful bool
 	Message    string
-	OutputFile string // name of the compressed file
+	// name of the compressed file
+	OutputFile string
 }
 
 // VideoProccessingJob hold the unit of work that we want our worker pool to perform
+// VideoProccessingJob is the unit of work to be performed. We wrap this type
+// around a Video, which has all the information we need about the input source
+// and what we want the output to look like
 type VideoProccessingJob struct {
 	Video Video
 }
@@ -48,6 +53,8 @@ func (vd *VideoDispatcher) NewVideo(id int, input, output, encType string, notif
 		ops = &VideoOption{}
 	}
 
+	fmt.Println("NewVideo: new video created:", id, input)
+
 	return Video{
 		ID:           id,
 		InputFile:    input,
@@ -65,24 +72,28 @@ func (v *Video) encode() {
 	switch v.EncodingType {
 	case "mp4":
 		// encode the video
+		fmt.Println("v.encode(): About to encode to mp4", v.ID)
 		name, err := v.encodeToMP4()
 		if err != nil {
-		    // send information to the NotifyChan
+			// send information to the NotifyChan
 			v.sendToNotifyChan(false, "", fmt.Sprintf("encode failed for %d: %s", v.ID, err.Error()))
 			return
 		}
 
 		filename = fmt.Sprintf("%s.mp4", name)
 	default:
+		fmt.Println("v.encode(): error trying to encode video", v.ID)
 		v.sendToNotifyChan(false, "", fmt.Sprintf("error processing for %d: invalid encoding type", v.ID))
+		return
 	}
 
+	fmt.Println("v.encode(): sending success message for video id", v.ID, "to notifyChan")
 	v.sendToNotifyChan(true, filename, fmt.Sprintf("video id %d processed and saved as %s", v.ID, path.Join(v.OutputDir, filename)))
 }
 
 func (v *Video) encodeToMP4() (string, error) {
 	baseFilename := ""
-
+	fmt.Println("v.encodeToMP: about to try to encode video id", v.ID)
 	if !v.Options.RenameOutput {
 		// Get the base filename
 		b := path.Base(v.InputFile)
@@ -97,10 +108,13 @@ func (v *Video) encodeToMP4() (string, error) {
 		return "", err
 	}
 
+	fmt.Println("v.encodeToMP4: successfully encoded video id", v.ID)
+
 	return baseFilename, nil
 }
 
 func (v *Video) sendToNotifyChan(success bool, filename, message string) {
+	fmt.Println("v.sendToNotifyChan: sending message to notifyChan for video id", v.ID)
 	v.NotifyChan <- ProcessingMessage{
 		ID:         v.ID,
 		Successful: success,
@@ -111,6 +125,7 @@ func (v *Video) sendToNotifyChan(success bool, filename, message string) {
 
 // VideoDispatcher: work pool
 func New(jobQueue chan VideoProccessingJob, maxWorkers int) *VideoDispatcher {
+    fmt.Println("New: creating worker pool")
 	workerPool := make(chan chan VideoProccessingJob, maxWorkers)
 
 	// TODO: Implement processor logic
