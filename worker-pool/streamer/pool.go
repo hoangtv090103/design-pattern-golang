@@ -22,7 +22,7 @@ type videoWorker struct {
 // newVideoWorker takes a numeric id and a channel of chan newVideoWorker, and returns a videoWorker
 func newVideoWorker(id int, workerPool chan chan VideoProccessingJob) videoWorker {
 	fmt.Println("newVideoWorker: creating video worker id", id)
-    return videoWorker{
+	return videoWorker{
 		id:         id,
 		jobQueue:   make(chan VideoProccessingJob),
 		workerPool: workerPool,
@@ -31,7 +31,7 @@ func newVideoWorker(id int, workerPool chan chan VideoProccessingJob) videoWorke
 
 // start starts a worker
 func (w videoWorker) start() {
-    fmt.Println("w.start(): starting worker id", w.id)
+	fmt.Println("w.start(): starting worker id", w.id)
 	go func() {
 		for {
 			// Add jobQueue to the worker pool.
@@ -49,9 +49,9 @@ func (w videoWorker) start() {
 
 // Run()
 func (vd *VideoDispatcher) Run() {
-    fmt.Println("vd.Run: starting worker pool by running workers")
+	fmt.Println("vd.Run: starting worker pool by running workers")
 	for i := 0; i < vd.maxWorkers; i++ {
-	   fmt.Println("vd.Run: starting worker id", i + 1)
+		fmt.Println("vd.Run: starting worker id", i+1)
 		worker := newVideoWorker(i+1, vd.WorkerPool)
 		worker.start()
 	}
@@ -64,7 +64,7 @@ func (vd *VideoDispatcher) dispatch() {
 	for {
 		// Wait for a job to come in.
 		job := <-vd.jobQueue
-		 fmt.Println("vd.dispatch: sending job", job.Video.ID, "to work job queue")
+		fmt.Println("vd.dispatch: sending job", job.Video.ID, "to work job queue")
 		go func() {
 			workerJobQueue := <-vd.WorkerPool
 			workerJobQueue <- job
@@ -74,6 +74,6 @@ func (vd *VideoDispatcher) dispatch() {
 
 // processVideoJob
 func (w videoWorker) processVideoJob(video Video) {
-    fmt.Println("w.processVideoJob: starting encode on video", video.ID)
+	fmt.Println("w.processVideoJob: starting encode on video", video.ID)
 	video.encode()
 }
