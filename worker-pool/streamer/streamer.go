@@ -73,6 +73,17 @@ func (v *Video) encode() {
 	case "mp4":
 		// encode the video
 		fmt.Println("v.encode(): About to encode to mp4", v.ID)
+		name, err := v.encodeToHLS()
+		if err != nil {
+			// send information to the NotifyChan
+			v.sendToNotifyChan(false, "", fmt.Sprintf("encode failed for %d: %s", v.ID, err.Error()))
+			return
+		}
+
+		filename = fmt.Sprintf("%s.m3u8", name)
+	case "hls":
+		// encode the video
+		fmt.Println("v.encode(): About to encode to mp4", v.ID)
 		name, err := v.encodeToMP4()
 		if err != nil {
 			// send information to the NotifyChan
@@ -113,6 +124,25 @@ func (v *Video) encodeToMP4() (string, error) {
 	return baseFilename, nil
 }
 
+func (v *Video) encodeToHLS() (string, error) {
+    baseFilename := ""
+    
+    if !v.Options.RenameOutput {
+        //Get the base filename
+        b := path.Base(v.InputFile)
+        baseFilename = strings.TrimSuffix(b, filepath.Ext(b))
+    } else {
+        // TODO: Generate random filename
+    }
+    
+    err := v.Encoder.Engine.EncodeToHLS(v, baseFilename)
+    if err != nil {
+        return "", err
+    }
+    
+    return baseFilename, nil
+}
+
 func (v *Video) sendToNotifyChan(success bool, filename, message string) {
 	fmt.Println("v.sendToNotifyChan: sending message to notifyChan for video id", v.ID)
 	v.NotifyChan <- ProcessingMessage{
@@ -125,7 +155,7 @@ func (v *Video) sendToNotifyChan(success bool, filename, message string) {
 
 // VideoDispatcher: work pool
 func New(jobQueue chan VideoProccessingJob, maxWorkers int) *VideoDispatcher {
-    fmt.Println("New: creating worker pool")
+	fmt.Println("New: creating worker pool")
 	workerPool := make(chan chan VideoProccessingJob, maxWorkers)
 
 	// TODO: Implement processor logic
