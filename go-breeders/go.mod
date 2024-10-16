@@ -8,4 +8,7 @@ require (
 	github.com/tsawler/toolbox v1.3.1
 )
 
-require filippo.io/edwards25519 v1.1.0 // indirect
+require (
+	filippo.io/edwards25519 v1.1.0 // indirect
+	github.com/xfrr/goffmpeg v1.0.0
+)

@@ -6,6 +6,7 @@ import (
 	"go-breeders/adapters"
 	"go-breeders/configuration"
 	"go-breeders/models"
+	"go-breeders/streamer"
 	"html/template"
 	"log"
 	"net/http"
@@ -19,6 +20,7 @@ type application struct {
 	config      appConfig
 	Models      models.Models
 	App         *configuration.Application
+	videoQueue chan streamer.VideoProcessingJob
 }
 
 type appConfig struct {
@@ -27,8 +29,14 @@ type appConfig struct {
 }
 
 func main() {
+    const numWorkers = 4
+    
+    videoQueue := make(chan streamer.VideoProcessingJob, numWorkers)
+    defer close(videoQueue)
+    
 	app := application{
 		templateMap: make(map[string]*template.Template),
+		videoQueue: videoQueue,
 	}
 
 	// parseTime: makes go time type work well with time values or date values inside of the database
@@ -61,8 +69,10 @@ func main() {
 	}
 
 	app.App = configuration.New(db, xmlAdapter)
-	
 
+	wp := streamer.New(videoQueue, numWorkers)
+	wp.Run()
+	
 	srv := &http.Server{
 		Addr:              port,
 		Handler:           app.routes(),
